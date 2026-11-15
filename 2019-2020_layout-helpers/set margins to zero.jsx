@@ -1,0 +1,47 @@
+var myDocument = app.activeDocument;
+var myPage = myDocument.pages[0];
+var guides = myDocument.guides;
+app.scriptPreferences.measurementUnit = MeasurementUnits.POINTS;  
+app.documents[0].zeroPoint = [0,0];  
+app.documents[0].viewPreferences.rulerOrigin = RulerOrigin.PAGE_ORIGIN;
+app.activeWindow.transformReferencePoint = AnchorPoint.CENTER_ANCHOR; 
+app.activeDocument.viewPreferences.horizontalMeasurementUnits = app.activeDocument.viewPreferences.verticalMeasurementUnits = MeasurementUnits.millimeters; 
+
+
+//We could un-check the option "Ungroup Remembers Layers"
+//Detect the version before running a script on groups:
+
+//if(app.version === "10.2.0.69"){uncheckUngroupRemembersLayers()};
+// uncheckUngroupRemembersLayers();
+// function uncheckUngroupRemembersLayers(){
+//     var myMenuAction = app.menuActions.itemByName("$ID/Ungroup Remembers Layers");    if(myMenuAction.checked === false){        app.panels.itemByName("$ID/#ImageLayersPanel").visible = true;        myMenuAction.invoke();        };    };
+
+//Then procede with working on groups:
+
+
+
+var main = function() {
+	var doc = app.properties.activeDocument, pgs, pg, b, w, h, m;
+	if ( !doc ) return;
+	pgs = doc.pages.everyItem().getElements();
+	
+	while ( pg = pgs.pop() ) {
+		
+		b = pg.bounds;
+		w = Math.abs( b[3]-b[1]);
+		h = Math.abs( b[2]-b[0]);
+        // m = Math.abs(w-h)/12;
+        m=0
+		
+		pg.marginPreferences.properties = {
+			top : m,
+			left: m,
+			right: m,
+			bottom: m
+		};
+	}
+}
+
+var u;
+
+app.doScript ( "main()",u,u,UndoModes.ENTIRE_SCRIPT, "The Script" );
